@@ -5,7 +5,7 @@ import { Bell } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { formatDate } from "@/lib/utils"
-import { markAllActivitiesAsRead } from "@/app/actions/activity-actions"
+import { markAllActivitiesAsRead } from "@/actions/activity-actions"
 import { useDataFetching } from "@/hooks/use-data-fetching"
 import { motion, AnimatePresence } from "framer-motion"
 

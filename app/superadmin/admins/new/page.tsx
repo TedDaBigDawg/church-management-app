@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react"
 import Link from "next/link"
-import { createAdmin } from "@/app/actions/admin-actions"
+import { createAdmin } from "@/actions/admin-actions"
 import { Form, FormField, FormLabel, FormInput } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"

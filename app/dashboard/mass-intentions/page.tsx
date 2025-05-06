@@ -14,7 +14,7 @@ import {
   getPastMassIntentionsCount,
   getUpcomingMassIntentions,
   getUpcomingMassIntentionsCount,
-} from "@/app/actions/mass-intention-actions"
+} from "@/actions/mass-intention-actions"
 // Update the Dialog and DialogContent imports to include custom styling
 import {
   Dialog,

@@ -1,6 +1,6 @@
 // app/api/login/route.ts
 
-import { logout } from "@/app/actions/auth-actions"; // Import server action
+import { logout } from "@/actions/auth-actions"; // Import server action
 import { cookies } from "next/headers";
 
 export async function POST() {

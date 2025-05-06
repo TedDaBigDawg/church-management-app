@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { requireAuth } from "@/lib/auth"
 import { formatDate, formatCurrency } from "@/lib/utils"
-import { getUserPayments, getActivePaymentGoals } from "@/app/actions/payment-actions"
+import { getUserPayments, getActivePaymentGoals } from "@/actions/payment-actions"
 import { PrettyAmount } from "@/components/ui/PrettyAmount"
 import { PaymentHistoryTable } from "@/components/payment-history-table"
 

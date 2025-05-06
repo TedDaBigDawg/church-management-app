@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { requireSuperadmin } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 import { formatDate } from "@/lib/utils"
-import { deleteAdmin } from "@/app/actions/admin-actions"
+import { deleteAdmin } from "@/actions/admin-actions"
 import { UserCog, Mail, Calendar, Trash2, Edit } from "lucide-react"
 
 export default async function AdminsPage() {

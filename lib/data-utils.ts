@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db"
-import type { Event, Mass } from "@/app/components/home-client"
+import type { Event, Mass } from "@/components/pages/home/home-client"
 import { MassStatus } from "@prisma/client"
 
 /**

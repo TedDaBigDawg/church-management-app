@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { formatDate } from "@/lib/utils"
-import { getUserActivities, markAllActivitiesAsRead } from "@/app/actions/activity-actions"
+import { getUserActivities, markAllActivitiesAsRead } from "@/actions/activity-actions"
 import {
   Bell,
   Check,

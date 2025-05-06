@@ -6,7 +6,7 @@ import { Form, FormField, FormLabel, FormInput, FormSelect, FormTextarea } from 
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { ErrorMessage } from "@/components/ui/error-message"
-import { createDonation } from "@/app/actions/donation-actions"
+import { createDonation } from "@/actions/donation-actions"
 
 export default function DonationForm() {
   const router = useRouter()

@@ -1,4 +1,4 @@
-import HomeClient from "@/app/components/home-client"
+import HomeClient from "@/components/pages/home/home-client"
 import { getUpcomingEvents, getUpcomingMasses } from "@/lib/data-utils"
 
 export default async function HomePage() {

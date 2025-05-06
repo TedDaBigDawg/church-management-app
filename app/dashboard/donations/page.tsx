@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { requireAuth } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 import { formatDate, formatCurrency } from "@/lib/utils"
-import { getActivePaymentGoals } from "@/app/actions/payment-actions"
+import { getActivePaymentGoals } from "@/actions/payment-actions"
 
 export default async function DonationsPage() {
   const user = await requireAuth()

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { register } from "@/app/actions/auth-actions"
+import { register } from "@/actions/auth-actions"
 import { Form, FormField, FormLabel, FormInput } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
@@ -20,7 +20,6 @@ export default function RegisterPage() {
     setIsSubmitting(true)
 
     try {
-      // Client-side validation
       const name = formData.get("name") as string
       const email = formData.get("email") as string
       const password = formData.get("password") as string
@@ -44,7 +43,6 @@ export default function RegisterPage() {
       const registerResult = await register(formData)
 
       if (registerResult?.error) {
-        // Check for specific error types to provide better messages
         if (registerResult.error.includes("already exists")) {
           setError("An account with this email already exists. Please use a different email or try logging in.")
         } else {

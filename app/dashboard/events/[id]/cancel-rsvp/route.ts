@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { cancelRsvp } from "@/app/actions/event-actions"
+import { cancelRsvp } from "@/actions/event-actions"
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   const eventId = params.id

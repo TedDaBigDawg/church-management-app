@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { requireSuperadmin } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 import { formatDate } from "@/lib/utils"
-import { getAdminActivities } from "@/app/actions/activity-actions"
+import { getAdminActivities } from "@/actions/activity-actions"
 import { Users, UserCog, CalendarDays, DollarSign, Bell, ShieldAlert } from "lucide-react"
 
 export default async function SuperadminDashboardPage() {

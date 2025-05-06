@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { createMassIntention } from "@/app/actions/mass-intention-actions"
+import { createMassIntention } from "@/actions/mass-intention-actions"
 import {
   FormField,
   FormLabel,
@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { getMassesWithAvailability } from "@/app/actions/mass-actions"
+import { getMassesWithAvailability } from "@/actions/mass-actions"
 import { formatDate, formatTime } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 import { Loader } from "lucide-react"

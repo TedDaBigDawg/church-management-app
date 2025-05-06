@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { getUserProfile, updateUserProfile } from "@/app/actions/profile-actions"
+import { getUserProfile, updateUserProfile } from "@/actions/profile-actions"
 import { Form, FormField, FormLabel, FormInput } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"

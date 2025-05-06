@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { requireAuth } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 import { formatDate } from "@/lib/utils"
-import { getUserActivities } from "@/app/actions/activity-actions"
+import { getUserActivities } from "@/actions/activity-actions"
 import { Bell, Calendar, FileText, Heart, PlusCircle, Target, Users } from "lucide-react"
 
 export default async function DashboardPage() {

@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { createThanksgiving } from "@/app/actions/thanksgiving-actions"
+import { createThanksgiving } from "@/actions/thanksgiving-actions"
 import { Form, FormField, FormLabel, FormTextarea, FormSelect } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { getMassesWithAvailability } from "@/app/actions/mass-actions"
+import { getMassesWithAvailability } from "@/actions/mass-actions"
 import { formatDate, formatTime } from "@/lib/utils"
 
 interface Mass {

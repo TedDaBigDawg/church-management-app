@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
-import { updateAdmin, resetAdminPassword } from "@/app/actions/admin-actions"
+import { updateAdmin, resetAdminPassword } from "@/actions/admin-actions"
 import { Form, FormField, FormLabel, FormInput } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"

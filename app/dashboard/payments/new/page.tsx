@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { PaymentType, PaymentCategory } from '@prisma/client'
-import { createPayment, getActivePaymentGoals, getPaymentGoalById } from '@/app/actions/payment-actions'
+import { createPayment, getActivePaymentGoals, getPaymentGoalById } from '@/actions/payment-actions'
 import { useToast } from '@/hooks/use-toast'
 
 type PaymentGoal = {
