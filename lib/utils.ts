@@ -27,6 +27,13 @@ export function formatTime(date: Date | string): string {
   })
 }
 
+ export  const formatServiceTime = (time: string) => {
+    const [hours, minutes] = time.split(":")
+    const hour = Number.parseInt(hours)
+    const ampm = hour >= 12 ? "PM" : "AM"
+    const formattedHour = hour % 12 || 12
+    return `${formattedHour}:${minutes} ${ampm}`
+  }
 export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -42,8 +49,20 @@ export function formatCompactNumber(value: number): string {
   return value.toString()
 }
 
+ export const getDayName = (dayOfWeek: number) => {
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    return days[dayOfWeek]
+  }
 
-
+ export const getCategoryColor = (category: string) => {
+    const colors = {
+      Worship: "bg-[#F5F6F5] text-[#1a1a1a]",
+      Study: "bg-[#F5F6F5] text-[#1a1a1a]",
+      Youth: "bg-[#F5F6F5] text-[#1a1a1a]",
+      Music: "bg-[#F5F6F5] text-[#1a1a1a]",
+    }
+    return colors[category as keyof typeof colors] || "bg-gray-100 text-gray-800"
+  }
 
 
 export function formatDate(date: Date): string {

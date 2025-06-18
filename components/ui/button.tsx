@@ -67,10 +67,10 @@ export function Button({
           <Loader2 className="h-4 w-4 animate-spin" />
         </span>
       )}
-      <span className={cn(isLoading && "invisible")}>
-        {icon && <span className="mr-2">{icon}</span>}
-        {children}
-      </span>
+     <span className={cn("inline-flex items-center", isLoading && "invisible")}>
+  {icon && <span className="mr-2">{icon}</span>}
+  {children}
+</span>
       {isLoading && loadingText && <span className="ml-2">{loadingText}</span>}
     </button>
   )

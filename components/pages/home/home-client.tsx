@@ -95,7 +95,7 @@ export default function HomePage({ upcomingEvents, upcomingMasses }: HomeClientP
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
               >
-                  <Button className="w-full sm:w-auto bg-secondary hover:bg-gold-600 text-[#1a1a1a] font-semibold px-8 py-3 text-lg rounded-full">
+                  <Button className="w-full sm:w-auto bg-secondary hover:bg-secondary text-[#1a1a1a] font-semibold px-8 py-3 text-lg rounded-full">
                 <Link className="flex mx-auto items-center justify-center" href="/services">
                     Explore Services
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -104,7 +104,7 @@ export default function HomePage({ upcomingEvents, upcomingMasses }: HomeClientP
                 <Link href="/register">
                   <Button
                     variant="outline"
-                    className="w-full sm:w-auto border-2 border-secondary text-[#1a1a1a] hover:bg-blue-50 text-lg rounded-full px-8 py-3"
+                    className="w-full sm:w-auto border-2 border-secondary text-[#1a1a1a] hover:bg-primary text-lg rounded-full px-8 py-3"
                   >
                     Join Us
                   </Button>

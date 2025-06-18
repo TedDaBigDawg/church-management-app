@@ -46,7 +46,8 @@ export async function GET(req: NextRequest) {
   const { socket, response } = await req.socket.server.upgrade(req)
 
   // Add user info to the socket
-  wss.handleUpgrade(req, socket, Buffer.alloc(0), (ws) => {
+  // @ts-ignore - Access the underlying Node.js IncomingMessage
+  wss.handleUpgrade(req['req'], socket, Buffer.alloc(0), (ws) => {
     // @ts-ignore
     ws.userId = session.user.id
     // @ts-ignore
