@@ -1,24 +1,36 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect, useRef, useCallback } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Menu, X, ChevronDown, User, LogOut, Home, Info, Calendar, Phone, LayoutDashboard } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { useClickOutside } from "@/hooks/use-click-outside"
-import { motion, AnimatePresence } from "framer-motion"
-import { useRouter } from "next/navigation"
-import ActivityNotifications from "./activity-notifications"
-import Image from "next/image"
+import type React from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  User,
+  LogOut,
+  Home,
+  Info,
+  Calendar,
+  Phone,
+  LayoutDashboard,
+  MessageCircle,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useClickOutside } from "@/hooks/use-click-outside";
+import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
+import ActivityNotifications from "./activity-notifications";
+import Image from "next/image";
 
 interface NavbarProps {
   user: {
-    id: string
-    name: string
-    email: string
-    role: string
-  } | null
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  } | null;
 }
 
 // Define navigation items based on role
@@ -27,42 +39,49 @@ const navigationItems = {
     { name: "Home", href: "/", icon: Home },
     { name: "About", href: "/about", icon: Info },
     { name: "Services", href: "/services", icon: Calendar },
+    { name: "Appointment", href: "/book-appointment", icon: MessageCircle },
     { name: "Contact", href: "/contact", icon: Phone },
   ],
-  authenticated: [{ name: "Dashboard", href: "/dashboard", icon: LayoutDashboard }],
-  admin: [{ name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard }],
-  superadmin: [{ name: "Dashboard", href: "/superadmin/dashboard", icon: LayoutDashboard }],
-}
+  authenticated: [
+    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  ],
+  admin: [
+    { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+  ],
+  superadmin: [
+    { name: "Dashboard", href: "/superadmin/dashboard", icon: LayoutDashboard },
+  ],
+};
 
 export default function Navbar({ user }: NavbarProps) {
-  const router = useRouter()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [userMenuOpen, setUserMenuOpen] = useState(false)
-  const mobileMenuRef = useRef<HTMLDivElement>(null)
-  const userMenuRef = useRef<HTMLDivElement>(null)
-  const pathname = usePathname()
-  
+  const router = useRouter();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
   // Client-side only state for enhanced features after hydration
-  const [isMounted, setIsMounted] = useState(false)
-  
+  const [isMounted, setIsMounted] = useState(false);
+
   // Mark component as mounted after hydration
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
+    setIsMounted(true);
+  }, []);
 
   // Use custom hook to handle clicks outside of menus
   useClickOutside(mobileMenuRef as React.RefObject<HTMLElement>, () => {
-    if (mobileMenuOpen) setMobileMenuOpen(false)
-  })
+    if (mobileMenuOpen) setMobileMenuOpen(false);
+  });
 
   useClickOutside(userMenuRef as React.RefObject<HTMLElement>, () => {
-    if (userMenuOpen) setUserMenuOpen(false)
-  })
+    if (userMenuOpen) setUserMenuOpen(false);
+  });
 
   // Close mobile menu when route changes
   useEffect(() => {
-    setMobileMenuOpen(false)
-  }, [pathname])
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   // Handle logout
   const handleLogout = useCallback(async () => {
@@ -74,71 +93,71 @@ export default function Navbar({ user }: NavbarProps) {
           "Content-Type": "application/json",
         },
         credentials: "include",
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       // Check if the logout response was successful
       if (!response.ok) {
-        throw new Error(data.error || "Logout failed")
+        throw new Error(data.error || "Logout failed");
       }
 
       // If there's a redirect URL provided in the response, use that, else go to login
-      const redirectUrl = data.redirectUrl || "/login"
+      const redirectUrl = data.redirectUrl || "/login";
 
       // Using router.push() for client-side redirection
-      router.push(redirectUrl)
-      router.refresh()
+      router.push(redirectUrl);
+      router.refresh();
     } catch (error) {
-      console.error("Error during logout:", error)
+      console.error("Error during logout:", error);
     }
-  }, [router])
+  }, [router]);
 
   // Determine which navigation items to show based on user role
   const getNavigationItems = useCallback(() => {
-    const items = [...navigationItems.public]
+    const items = [...navigationItems.public];
 
     if (user) {
       if (user.role === "PARISHIONER") {
-        items.push(...navigationItems.authenticated)
+        items.push(...navigationItems.authenticated);
       }
 
       if (user.role === "ADMIN") {
-        items.push(...navigationItems.admin)
+        items.push(...navigationItems.admin);
       }
 
       if (user.role === "SUPERADMIN") {
-        items.push(...navigationItems.superadmin)
+        items.push(...navigationItems.superadmin);
       }
     }
 
-    return items
-  }, [user])
+    return items;
+  }, [user]);
 
-  const navItems = getNavigationItems()
+  const navItems = getNavigationItems();
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden"
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "auto"
+      document.body.style.overflow = "auto";
     }
 
     return () => {
-      document.body.style.overflow = "auto"
-    }
-  }, [mobileMenuOpen])
+      document.body.style.overflow = "auto";
+    };
+  }, [mobileMenuOpen]);
 
   function getProfilePath(role: string) {
     switch (role) {
       case "ADMIN":
-        return "/admin/profile"
+        return "/admin/profile";
       case "SUPERADMIN":
-        return "/profile" // Superadmin uses same profile path as parishioners
+        return "/profile"; // Superadmin uses same profile path as parishioners
       case "PARISHIONER":
       default:
-        return "/profile"
+        return "/profile";
     }
   }
 
@@ -148,12 +167,12 @@ export default function Navbar({ user }: NavbarProps) {
         <div className="flex justify-between h-16">
           <div className="flex w-full h-full items-center flex-grow">
             <Link href="/" className="flex-shrink-0 flex items-center">
-                <Image
-                src='/assets/transparent-logo.png'
+              <Image
+                src="/assets/transparent-logo.png"
                 width={150}
                 height={150}
                 alt="Lumina Logo"
-                />
+              />
             </Link>
           </div>
 
@@ -161,7 +180,9 @@ export default function Navbar({ user }: NavbarProps) {
           <div className="hidden gap-3 md:flex md:items-center md:space-x-4">
             {navItems &&
               navItems.map((item) => {
-                const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
+                const isActive =
+                  pathname === item.href ||
+                  pathname.startsWith(item.href + "/");
                 return (
                   <Link
                     key={item.name}
@@ -174,15 +195,14 @@ export default function Navbar({ user }: NavbarProps) {
                     <item.icon className="h-4 w-4 mr-1" />
                     {item.name}
                   </Link>
-                )
+                );
               })}
 
             {!user && (
-              <Link href="/register">
+              <Link className=" px-[20px]" href="/register">
                 <Button
                   variant="outline"
-                  size="sm"
-                  className="text-white border-white hover:bg-blue-500 rounded-full transition-colors duration-200"
+                  className="text-white px-[40px] border-white hover:bg-blue-500 rounded-full transition-colors duration-200"
                 >
                   Register
                 </Button>
@@ -215,9 +235,13 @@ export default function Navbar({ user }: NavbarProps) {
                     <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center">
                       <User className="h-5 w-5" />
                     </div>
-                    <span className="ml-2 hidden md:block max-w-[100px] truncate">{user.name}</span>
+                    <span className="ml-2 hidden md:block max-w-[100px] truncate">
+                      {user.name}
+                    </span>
                     <ChevronDown
-                      className={`ml-1 h-4 w-4 transition-transform duration-200 ${userMenuOpen ? "rotate-180" : ""}`}
+                      className={`ml-1 h-4 w-4 transition-transform duration-200 ${
+                        userMenuOpen ? "rotate-180" : ""
+                      }`}
                     />
                   </button>
                 </div>
@@ -236,7 +260,9 @@ export default function Navbar({ user }: NavbarProps) {
                     >
                       <div className="px-4 py-2 text-xs text-gray-500 border-b">
                         <span className="font-medium">Signed in as</span>
-                        <div className="font-medium truncate mt-0.5 text-gray-700">{user.email}</div>
+                        <div className="font-medium truncate mt-0.5 text-gray-700">
+                          {user.email}
+                        </div>
                       </div>
 
                       <Link
@@ -273,15 +299,17 @@ export default function Navbar({ user }: NavbarProps) {
                 </AnimatePresence>
               </div>
             ) : (
-              <Link href="/login">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-white rounded-full border-white hover:bg-blue-500 transition-colors duration-200"
-                >
-                  Sign in
-                </Button>
-              </Link>
+              <div className="">
+                <Link className=" px-[20px]" href="/login">
+                  <Button
+                    variant="outline"
+                    // size="sm"
+                    className="text-white px-[40px] rounded-full  border-white hover:bg-blue-500 transition-colors duration-200"
+                  >
+                    Sign in
+                  </Button>
+                </Link>
+              </div>
             )}
 
             {/* Mobile menu button */}
@@ -345,8 +373,12 @@ export default function Navbar({ user }: NavbarProps) {
                       <User className="h-5 w-5" />
                     </div>
                     <div className="ml-3 overflow-hidden">
-                      <div className="text-base font-medium truncate">{user.name}</div>
-                      <div className="text-sm text-blue-200 truncate">{user.email}</div>
+                      <div className="text-base font-medium truncate">
+                        {user.name}
+                      </div>
+                      <div className="text-sm text-blue-200 truncate">
+                        {user.email}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -355,7 +387,9 @@ export default function Navbar({ user }: NavbarProps) {
               <div className="px-2 pt-2 pb-3 space-y-1">
                 {navItems &&
                   navItems.map((item) => {
-                    const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
+                    const isActive =
+                      pathname === item.href ||
+                      pathname.startsWith(item.href + "/");
                     return (
                       <Link
                         key={item.name}
@@ -369,7 +403,7 @@ export default function Navbar({ user }: NavbarProps) {
                         <item.icon className="h-5 w-5 mr-2" />
                         {item.name}
                       </Link>
-                    )
+                    );
                   })}
 
                 {!user ? (
@@ -413,8 +447,8 @@ export default function Navbar({ user }: NavbarProps) {
                       type="button"
                       className="w-full text-left flex items-center px-3 py-2 rounded-md text-base font-medium hover:bg-blue-600 transition-colors duration-200"
                       onClick={() => {
-                        setMobileMenuOpen(false)
-                        handleLogout()
+                        setMobileMenuOpen(false);
+                        handleLogout();
                       }}
                     >
                       <LogOut className="h-5 w-5 mr-2" />
@@ -427,7 +461,7 @@ export default function Navbar({ user }: NavbarProps) {
           </>
         )}
       </AnimatePresence>
-      
+
       {/* Add responsive styling for the logo text via CSS */}
       <style jsx>{`
         @media (max-width: 320px) {
@@ -446,5 +480,5 @@ export default function Navbar({ user }: NavbarProps) {
         }
       `}</style>
     </nav>
-  )
+  );
 }
