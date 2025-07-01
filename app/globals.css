@@ -30,14 +30,19 @@
     --input-background: 30, 41, 59;
     --input-foreground: 255, 255, 255;
     --input-border: 55, 65, 81;
-  --text-primary: 26, 26, 26;
+    --text-primary: 26, 26, 26;
     --text-secondary: 156, 163, 175;
   }
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }
 
 @layer base {
@@ -78,4 +83,3 @@ body {
     @apply text-red-500 text-sm mt-1;
   }
 }
-

@@ -1,157 +1,178 @@
 "use client"
 
-import type React from "react"
+import * as React from "react"
+import * as LabelPrimitive from "@radix-ui/react-label"
+import { Slot } from "@radix-ui/react-slot"
+import {
+  Controller,
+  FormProvider,
+  useFormContext,
+  type ControllerProps,
+  type FieldPath,
+  type FieldValues,
+} from "react-hook-form"
+
 import { cn } from "@/lib/utils"
-import { motion } from "framer-motion"
+import { Label } from "@/components/ui/label"
 
-interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {
-  isSubmitting?: boolean
+const Form = FormProvider
+
+type FormFieldContextValue<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+> = {
+  name: TName
 }
 
-export function Form({ className, isSubmitting, ...props }: FormProps) {
+const FormFieldContext = React.createContext<FormFieldContextValue>(
+  {} as FormFieldContextValue
+)
+
+const FormField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+>({
+  ...props
+}: ControllerProps<TFieldValues, TName>) => {
   return (
-    <form className={cn("space-y-6 relative", className)} {...props}>
-      {isSubmitting && (
-        <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 rounded-md">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-        </div>
-      )}
-      {props.children}
-    </form>
+    <FormFieldContext.Provider value={{ name: props.name }}>
+      <Controller {...props} />
+    </FormFieldContext.Provider>
   )
 }
 
-interface FormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
-  error?: string
+const useFormField = () => {
+  const fieldContext = React.useContext(FormFieldContext)
+  const itemContext = React.useContext(FormItemContext)
+  const { getFieldState, formState } = useFormContext()
+
+  const fieldState = getFieldState(fieldContext.name, formState)
+
+  if (!fieldContext) {
+    throw new Error("useFormField should be used within <FormField>")
+  }
+
+  const { id } = itemContext
+
+  return {
+    id,
+    name: fieldContext.name,
+    formItemId: `${id}-form-item`,
+    formDescriptionId: `${id}-form-item-description`,
+    formMessageId: `${id}-form-item-message`,
+    ...fieldState,
+  }
 }
 
-export function FormField({ className, error, ...props }: FormFieldProps) {
+type FormItemContextValue = {
+  id: string
+}
+
+const FormItemContext = React.createContext<FormItemContextValue>(
+  {} as FormItemContextValue
+)
+
+const FormItem = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
+  const id = React.useId()
+
   return (
-    <div className={cn("space-y-2", className)}>
-      {props.children}
-      {error && (
-        <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-red-500 text-sm mt-1">
-          {error}
-        </motion.p>
-      )}
-    </div>
+    <FormItemContext.Provider value={{ id }}>
+      <div ref={ref} className={cn("space-y-2", className)} {...props} />
+    </FormItemContext.Provider>
   )
-}
+})
+FormItem.displayName = "FormItem"
 
-interface FormLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
-  required?: boolean
-}
+const FormLabel = React.forwardRef<
+  React.ElementRef<typeof LabelPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
+>(({ className, ...props }, ref) => {
+  const { error, formItemId } = useFormField()
 
-export function FormLabel({ className, required, ...props }: FormLabelProps) {
   return (
-    <label className={cn("block text-sm font-medium text-gray-700 dark:text-gray-300", className)} {...props}>
-      {props.children}
-      {required && <span className="text-red-500 ml-1">*</span>}
-    </label>
-  )
-}
-
-interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  error?: boolean
-}
-
-export function FormInput({ className, error, ...props }: FormInputProps) {
-  return (
-    <input
-      className={cn(
-        "w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white transition-colors duration-200",
-        error && "border-red-500 focus:ring-red-500",
-        props.disabled && "opacity-60 cursor-not-allowed bg-gray-100",
-        className,
-      )}
+    <Label
+      ref={ref}
+      className={cn(error && "text-destructive", className)}
+      htmlFor={formItemId}
       {...props}
     />
   )
-}
+})
+FormLabel.displayName = "FormLabel"
 
-interface FormTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  error?: boolean
-}
+const FormControl = React.forwardRef<
+  React.ElementRef<typeof Slot>,
+  React.ComponentPropsWithoutRef<typeof Slot>
+>(({ ...props }, ref) => {
+  const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
 
-export function FormTextarea({ className, error, ...props }: FormTextareaProps) {
   return (
-    <textarea
-      className={cn(
-        "w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white transition-colors duration-200",
-        error && "border-red-500 focus:ring-red-500",
-        props.disabled && "opacity-60 cursor-not-allowed bg-gray-100",
-        className,
-      )}
+    <Slot
+      ref={ref}
+      id={formItemId}
+      aria-describedby={
+        !error
+          ? `${formDescriptionId}`
+          : `${formDescriptionId} ${formMessageId}`
+      }
+      aria-invalid={!!error}
       {...props}
     />
   )
-}
+})
+FormControl.displayName = "FormControl"
 
-interface FormSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  error?: boolean
-}
+const FormDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => {
+  const { formDescriptionId } = useFormField()
 
-export function FormSelect({ className, error, ...props }: FormSelectProps) {
   return (
-    <select
-      className={cn(
-        "w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white transition-colors duration-200",
-        error && "border-red-500 focus:ring-red-500",
-        props.disabled && "opacity-60 cursor-not-allowed bg-gray-100",
-        className,
-      )}
+    <p
+      ref={ref}
+      id={formDescriptionId}
+      className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
   )
-}
+})
+FormDescription.displayName = "FormDescription"
 
-interface FormCheckboxProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "checked" | "onCheckedChange"> {
-  checked?: boolean
-  onCheckedChange?: (checked: boolean | "indeterminate") => void
-  error?: boolean
-}
+const FormMessage = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, children, ...props }, ref) => {
+  const { error, formMessageId } = useFormField()
+  const body = error ? String(error?.message ?? "") : children
 
-export function FormCheckbox({ className, checked, onCheckedChange, error, ...props }: FormCheckboxProps) {
+  if (!body) {
+    return null
+  }
+
   return (
-    <input
-      type="checkbox"
-      className={cn(
-        "h-4 w-4 rounded border-gray-300 text-[#1a1a1a] focus:ring-blue-500 transition-colors duration-200",
-        error && "border-red-500 focus:ring-red-500",
-        props.disabled && "opacity-60 cursor-not-allowed",
-        className,
-      )}
-      checked={checked}
-      onChange={(e) => onCheckedChange?.(e.target.checked)}
+    <p
+      ref={ref}
+      id={formMessageId}
+      className={cn("text-sm font-medium text-destructive", className)}
       {...props}
-    />
+    >
+      {body}
+    </p>
   )
+})
+FormMessage.displayName = "FormMessage"
+
+export {
+  useFormField,
+  Form,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  FormField,
 }
-
-interface FormErrorProps extends React.HTMLAttributes<HTMLParagraphElement> {}
-
-export function FormError({ className, ...props }: FormErrorProps) {
-  return (
-    <motion.p
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={cn("text-red-500 text-sm mt-1", className)}
-      {...props}
-    />
-  )
-}
-
-interface FormSuccessProps extends React.HTMLAttributes<HTMLParagraphElement> {}
-
-export function FormSuccess({ className, ...props }: FormSuccessProps) {
-  return (
-    <motion.p
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={cn("text-green-500 text-sm mt-1", className)}
-      {...props}
-    />
-  )
-}
-
