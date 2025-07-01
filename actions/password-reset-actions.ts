@@ -48,18 +48,18 @@ export async function requestPasswordReset(formData: FormData) {
     const expiresAt = new Date(Date.now() + 3600000) // 1 hour from now
 
     // Store token in database
-    await prisma.passwordReset.upsert({
-      where: { userId: user.id },
-      update: {
-        token,
-        expiresAt,
-      },
-      create: {
-        userId: user.id,
-        token,
-        expiresAt,
-      },
-    })
+    // await prisma.passwordReset.upsert({
+    //   where: { userId: user.id },
+    //   update: {
+    //     token,
+    //     expiresAt,
+    //   },
+    //   create: {
+    //     userId: user.id,
+    //     token,
+    //     expiresAt,
+    //   },
+    // })
 
     // In a real app, send email with reset link
     // For now, just log it
@@ -73,54 +73,54 @@ export async function requestPasswordReset(formData: FormData) {
 }
 
 // Reset password
-export async function resetPassword(formData: FormData) {
-  try {
-    const token = formData.get("token") as string
-    const password = formData.get("password") as string
+// export async function resetPassword(formData: FormData) {
+//   try {
+//     const token = formData.get("token") as string
+//     const password = formData.get("password") as string
 
-    // Validate input
-    const result = resetPasswordSchema.safeParse({ token, password })
-    if (!result.success) {
-      return { error: result.error.errors[0].message }
-    }
+//     // Validate input
+//     const result = resetPasswordSchema.safeParse({ token, password })
+//     if (!result.success) {
+//       return { error: result.error.errors[0].message }
+//     }
 
-    // Find valid reset token
-    const resetRecord = await prisma.passwordReset.findFirst({
-      where: {
-        token,
-        expiresAt: {
-          gt: new Date(),
-        },
-      },
-      include: {
-        user: true,
-      },
-    })
+//     // Find valid reset token
+//     const resetRecord = await prisma.passwordReset.findFirst({
+//       where: {
+//         token,
+//         expiresAt: {
+//           gt: new Date(),
+//         },
+//       },
+//       include: {
+//         user: true,
+//       },
+//     })
 
-    if (!resetRecord) {
-      return { error: "Invalid or expired reset token" }
-    }
+//     if (!resetRecord) {
+//       return { error: "Invalid or expired reset token" }
+//     }
 
-    // Hash new password
-    const hashedPassword = await bcrypt.hash(password, 10)
+//     // Hash new password
+//     const hashedPassword = await bcrypt.hash(password, 10)
 
-    // Update user password
-    await prisma.user.update({
-      where: { id: resetRecord.userId },
-      data: {
-        password: hashedPassword,
-      },
-    })
+//     // Update user password
+//     await prisma.user.update({
+//       where: { id: resetRecord.userId },
+//       data: {
+//         password: hashedPassword,
+//       },
+//     })
 
-    // Delete used token
-    await prisma.passwordReset.delete({
-      where: { id: resetRecord.id },
-    })
+//     // Delete used token
+//     await prisma.passwordReset.delete({
+//       where: { id: resetRecord.id },
+//     })
 
-    return { success: true }
-  } catch (error) {
-    logError(error, "RESET_PASSWORD")
-    return { error: "An unexpected error occurred. Please try again." }
-  }
-}
+//     return { success: true }
+//   } catch (error) {
+//     logError(error, "RESET_PASSWORD")
+//     return { error: "An unexpected error occurred. Please try again." }
+//   }
+// }
 
