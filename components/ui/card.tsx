@@ -1,78 +1,79 @@
-"use client"
+import * as React from "react"
 
-import type React from "react"
 import { cn } from "@/lib/utils"
-import { motion } from "framer-motion"
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  isLoading?: boolean
-  animate?: boolean
-}
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      className
+    )}
+    {...props}
+  />
+))
+Card.displayName = "Card"
 
-export function Card({ className, isLoading, animate = false, ...props }: CardProps) {
-  const CardComponent: React.ElementType = animate ? motion.div : "div"
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    {...props}
+  />
+))
+CardHeader.displayName = "CardHeader"
 
-  const animationProps = animate
-    ? {
-        initial: { opacity: 0, y: 20 },
-        animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.3 },
-      }
-    : {}
+const CardTitle = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "text-2xl font-semibold leading-none tracking-tight",
+      className
+    )}
+    {...props}
+  />
+))
+CardTitle.displayName = "CardTitle"
 
-  return (
-    <CardComponent
-      className={cn("bg-white rounded-lg shadow-md overflow-hidden dark:bg-gray-800 relative", className)}
-      {...animationProps}
-      {...props}
-    >
-      {isLoading && (
-        <div className="absolute inset-0 bg-white/70 dark:bg-gray-800/70 flex items-center justify-center z-10">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-        </div>
-      )}
-      {props.children}
-    </CardComponent>
-  )
-}
+const CardDescription = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+))
+CardDescription.displayName = "CardDescription"
 
-interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-  compact?: boolean
-}
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+))
+CardContent.displayName = "CardContent"
 
-export function CardHeader({ className, compact, ...props }: CardHeaderProps) {
-  return (
-    <div className={cn("p-6 border-b border-gray-200 dark:border-gray-700", compact && "p-4", className)} {...props} />
-  )
-}
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex items-center p-6 pt-0", className)}
+    {...props}
+  />
+))
+CardFooter.displayName = "CardFooter"
 
-interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
-
-export function CardTitle({ className, ...props }: CardTitleProps) {
-  return <h3 className={cn("text-xl font-bold text-gray-900 dark:text-white", className)} {...props} />
-}
-
-interface CardDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
-
-export function CardDescription({ className, ...props }: CardDescriptionProps) {
-  return <p className={cn("text-sm text-gray-500 dark:text-gray-400", className)} {...props} />
-}
-
-interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  compact?: boolean
-}
-
-export function CardContent({ className, compact, ...props }: CardContentProps) {
-  return <div className={cn("p-6 text-gray-700 dark:text-gray-300", compact && "p-4", className)} {...props} />
-}
-
-interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
-  compact?: boolean
-}
-
-export function CardFooter({ className, compact, ...props }: CardFooterProps) {
-  return (
-    <div className={cn("p-6 border-t border-gray-200 dark:border-gray-700", compact && "p-4", className)} {...props} />
-  )
-}
-
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
