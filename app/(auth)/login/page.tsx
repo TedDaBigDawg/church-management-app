@@ -166,7 +166,7 @@ export default function LoginPage() {
             <div className="mt-6">
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full hover:bg-primary"
                 disabled={isSubmitting}
                 aria-busy={isSubmitting}
               >

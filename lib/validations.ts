@@ -125,3 +125,15 @@ export const contactSchema = z.object({
     })
     .regex(phoneNumberRegex, "Phone format (+2348012345678)"),
 });
+
+export const editSchema = z.object({
+  name: z.string().min(2, {
+    message: "Name is too short",
+  }),
+  email: z.string().email(),
+  phone: z
+    .string({
+      required_error: "Please enter a valid a phone number",
+    })
+    .regex(phoneNumberRegex, "Phone format (+2348012345678)"),
+});
