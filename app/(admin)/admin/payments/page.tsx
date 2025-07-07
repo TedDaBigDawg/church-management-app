@@ -48,7 +48,7 @@ export default async function AdminDonationsPage() {
               View and manage all donations and offerings.
             </p>
           </div>
-          <Link href="/admin/payments/goals/new">
+          <Link href="/admin/payments/new">
             <Button>Create Fundraising Goal</Button>
           </Link>
         </div>

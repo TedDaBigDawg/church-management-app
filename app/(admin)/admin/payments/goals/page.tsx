@@ -35,7 +35,7 @@ export default async function AdminPaymentGoalsPage() {
               Manage donation and offering goals for the church.
             </p>
           </div>
-          <Link href="/admin/payments/goals/new">
+          <Link href="/admin/payments/new">
             <Button>Create New Goal</Button>
           </Link>
         </div>
@@ -107,7 +107,7 @@ export default async function AdminPaymentGoalsPage() {
                 <p className="text-gray-500 mb-4">
                   No active fundraising goals.
                 </p>
-                <Link href="/admin/payments/goals/new">
+                <Link href="/admin/payments/new">
                   <Button>Create New Goal</Button>
                 </Link>
               </CardContent>
